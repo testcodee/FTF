@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FTF - 메인 화면</title>
+    <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+<header class="header">
+    <button class="menu-btn" aria-label="메뉴 열기">
+        &#9776;
+    </button>
+    <div class="welcome-msg">
+        <span class="nickname" th:text="${user.name}">별명</span> 님 안녕하세요
+    </div>
+</header>
+
+<main class="container">
+    <section class="section">
+        <h2 class="section-title">자산 현황 요약</h2>
+        <div class="item-row">
+            <div class="item">
+                <div class="item-circle"></div>
+                <div class="item-label">총 자산</div>
+                <p th:text="${totalAssets + '원'}"></p>
+            </div>
+            <div class="item">
+                <div class="item-circle"></div>
+                <div class="item-label">이번달 수입</div>
+                <p th:text="${monthlyIncome + '원'}"></p>
+            </div>
+            <div class="item">
+                <div class="item-circle"></div>
+                <div class="item-label">이번달 지출</div>
+                <p th:text="${monthlyExpense + '원'}"></p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title" th:text="${goalName}">내 집 마련 플랜</h2>
+        <div style="width: 100%; background-color: #e0e0e0; border-radius: 5px; margin-top: 10px;">
+            <div style="width: 0%; "
+                 th:style="'width: ' + ${goalProgressPercentage} + '%;background-color: #007bff; height: 20px; border-radius: 5px; text-align: center; color: white;'">
+                <span th:text="${goalProgressPercentage + '%'}"></span>
+            </div>
+        </div>
+        <p style="margin-top: 10px;">
+            <span th:text="${goalAchievedAmount + '원'}"></span> / <span th:text="${goalTargetAmount + '원'}"></span> 달성
+        </p>
+    </section>
+
+    <!-- 기존의 섹션 1,2,3 아이템은 Mock Data 예시로 사용하거나 제거 -->
+    <section class="section">
+        <h2 class="section-title">빠른 메뉴</h2>
+        <div class="item-row">
+            <div class="item">
+                <div class="item-circle"></div>
+                <a class="item-label" href="/api/chatbot">가계부 입력</a>
+            </div>
+            <div class="item">
+                <div class="item-circle"></div>
+                <a class="item-label" href="#">가계부 조회</a>
+            </div>
+            <div class="item">
+                <div class="item-circle"></div>
+                <a class="item-label" href="#">재정 목표</a>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>
