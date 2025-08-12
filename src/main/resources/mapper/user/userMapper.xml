@@ -19,4 +19,15 @@
         FROM users
         WHERE username = #{username}
     </select>
+
+    <update id="updateUser" parameterType="com.tft.forthefuture.User.Vo.User">
+        UPDATE users
+        SET
+            name = #{name},
+            nickname = #{nickname},
+            email = #{email},
+            password = #{password},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
 </mapper>
