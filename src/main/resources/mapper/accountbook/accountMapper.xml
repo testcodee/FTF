@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tft.forthefuture.Accountbook.Mapper.AccountMapper">
+    <!-- 계좌 조회 -->
+    <select id="findAllByUserId" parameterType="Long" resultType="com.tft.forthefuture.Accountbook.Vo.Account">
+        SELECT id, user_id, account_name, account_type, balance, created_at, updated_at
+        FROM accounts
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="findById" parameterType="Long" resultType="com.tft.forthefuture.Accountbook.Vo.Account">
+        SELECT id, user_id, account_name, account_type, balance, created_at, updated_at
+        FROM accounts
+        WHERE id = #{id}
+    </select>
+
+    <!-- 총 자산 조회 (계좌 유형이 'DEBT'가 아닌 계좌들의 잔액 합) -->
+    <select id="findTotalBalanceByUserId" parameterType="Long" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(balance), 0)
+        FROM accounts
+        WHERE user_id = #{userId}
+          AND account_type NOT IN ('CREDIT_CARD', 'LOAN')
+    </select>
+
+    <!-- 총 부채 조회 (계좌 유형이 'CREDIT_CARD' 또는 'LOAN'인 계좌들의 잔액 합) -->
+    <select id="findTotalDebtByUserId" parameterType="Long" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(balance), 0)
+        FROM accounts
+        WHERE user_id = #{userId}
+          AND account_type IN ('CREDIT_CARD', 'LOAN')
+    </select>
+
+    <!-- 계좌 추가 -->
+    <insert id="insert" parameterType="com.tft.forthefuture.Accountbook.Vo.Account" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO accounts (user_id, account_name, account_type, balance, created_at, updated_at)
+        VALUES (#{userId}, #{accountName}, #{accountType}, #{balance}, NOW(), NOW())
+    </insert>
+
+    <!-- 계좌 정보 수정 -->
+    <update id="update" parameterType="com.tft.forthefuture.Accountbook.Vo.Account">
+        UPDATE accounts
+        SET account_name = #{accountName},
+            account_type = #{accountType},
+            balance = #{balance},
+            updated_at = NOW()
+        WHERE id = #{id} AND user_id = #{userId}
+    </update>
+
+    <!-- 계좌 잔액만 수정 -->
+    <update id="updateBalance">
+        UPDATE accounts
+        SET balance = #{newBalance},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 계좌 삭제 -->
+    <delete id="delete" parameterType="Long">
+        DELETE FROM accounts
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 계좌 유형별 조회 -->
+    <select id="findByUserIdAndType" resultType="com.tft.forthefuture.Accountbook.Vo.Account">
+        SELECT id, user_id, account_name, account_type, balance, created_at, updated_at
+        FROM accounts
+        WHERE user_id = #{userId} AND account_type = #{accountType}
+    </select>
+</mapper>

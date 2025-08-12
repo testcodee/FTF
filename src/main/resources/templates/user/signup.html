@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTF - 회원가입</title>
+    <link rel="stylesheet" href="/css/user/signup.css">
+    <script src="/js/user/signup.js"></script>
+</head>
+<body>
+<div class="signup-wrapper">
+    <div class="signup-box">
+        <h1 class="logo">FTF</h1> <!-- 로고 대신 프로젝트명 사용 -->
+
+        <div class="divider">
+            <div class="line"></div>
+            <p>또는</p>
+            <div class="line"></div>
+        </div>
+
+        <form th:action="@{/signup}" method="post" class="signup-form">
+            <!-- User VO의 필드명과 맞춰서 name 속성 지정 -->
+            <input type="text" id="username" name="username" placeholder="아이디 (4~12자 영문, 숫자)" required />
+            <!-- 이름 필드 -->
+            <input type="text" id="name" name="name" placeholder="이름" required />
+            <!-- 사용자 이름을 별명으로 변경 -->
+            <input type="text" id="nickname" name="nickname" placeholder="별명" required />
+            <!-- 이메일 필드 추가 -->
+            <input type="email" id="email" name="email" placeholder="이메일" required />
+            <!-- 비밀번호 필드는 그대로 유지 -->
+            <input type="password" id="password" name="password" placeholder="비밀번호" required />
+
+
+            <p class="policy-text">
+                가입하면 FTF의 <a href="#">약관</a>, <a href="#">개인정보처리방침</a> 및 <a href="#">쿠키 정책</a>에 동의하게 됩니다.
+            </p>
+
+            <button type="submit" class="signup-btn">가입</button>
+        </form>
+    </div>
+
+    <div class="login-box">
+        <p>계정이 있으신가요? <a href="/login">로그인</a></p>
+    </div>
+</div>
+</body>
+</html>

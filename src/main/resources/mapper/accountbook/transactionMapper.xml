@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tft.forthefuture.Accountbook.Mapper.TransactionMapper">
+
+    <!-- 거래 내역 추가 -->
+    <insert id="insert" parameterType="com.tft.forthefuture.Accountbook.Vo.Transaction" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO transactions (user_id, account_id, transaction_type, amount, category, description, transaction_date, created_at, updated_at)
+        VALUES (#{userId}, #{accountId}, #{transactionType}, #{amount}, #{category}, #{description}, #{transactionDate}, NOW(), NOW())
+    </insert>
+
+    <!-- 거래 내역 조회 -->
+    <select id="findById" parameterType="Long" resultType="com.tft.forthefuture.Accountbook.Vo.Transaction">
+        SELECT id, user_id, account_id, transaction_type, amount, category, description, transaction_date, created_at, updated_at
+        FROM transactions
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByUserId" parameterType="Long" resultType="com.tft.forthefuture.Accountbook.Vo.Transaction">
+        SELECT id, user_id, account_id, transaction_type, amount, category, description, transaction_date, created_at, updated_at
+        FROM transactions
+        WHERE user_id = #{userId}
+        ORDER BY transaction_date DESC
+    </select>
+
+    <!-- 기간별 거래 내역 조회 -->
+    <select id="findByUserIdAndPeriod" resultType="com.tft.forthefuture.Accountbook.Vo.Transaction">
+        SELECT id, user_id, account_id, transaction_type, amount, category, description, transaction_date, created_at, updated_at
+        FROM transactions
+        WHERE user_id = #{userId}
+          AND transaction_date BETWEEN #{startDate} AND #{endDate}
+        ORDER BY transaction_date DESC
+    </select>
+
+    <!-- 특정 기간 내 수입/지출 합계 -->
+    <select id="getTotalIncomeByPeriod" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(amount), 0)
+        FROM transactions
+        WHERE user_id = #{userId}
+          AND transaction_type = 'INCOME'
+          AND transaction_date BETWEEN #{startDate} AND #{endDate}
+    </select>
+
+    <select id="getTotalExpenseByPeriod" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(amount), 0)
+        FROM transactions
+        WHERE user_id = #{userId}
+          AND transaction_type = 'EXPENSE'
+          AND transaction_date BETWEEN #{startDate} AND #{endDate}
+    </select>
+
+    <!-- 카테고리별 지출 합계 -->
+    <select id="getExpenseSummaryByCategory" resultType="java.util.Map">
+        SELECT category, SUM(amount) as total
+        FROM transactions
+        WHERE user_id = #{userId}
+          AND transaction_type = 'EXPENSE'
+          AND transaction_date BETWEEN #{startDate} AND #{endDate}
+        GROUP BY category
+        ORDER BY total DESC
+    </select>
+
+    <!-- 월별 수입/지출 추이 -->
+    <select id="getMonthlyIncomeTrend" resultType="java.util.Map">
+        SELECT DATE_FORMAT(transaction_date, '%Y-%m') as month, SUM(amount) as total
+        FROM transactions
+        WHERE user_id = #{userId}
+          AND transaction_type = 'INCOME'
+          AND YEAR(transaction_date) = #{year}
+        GROUP BY month
+        ORDER BY month
+    </select>
+
+    <select id="getMonthlyExpenseTrend" resultType="java.util.Map">
+        SELECT DATE_FORMAT(transaction_date, '%Y-%m') as month, SUM(amount) as total
+        FROM transactions
+        WHERE user_id = #{userId}
+          AND transaction_type = 'EXPENSE'
+          AND YEAR(transaction_date) = #{year}
+        GROUP BY month
+        ORDER BY month
+    </select>
+
+    <!-- 거래 내역 수정 -->
+    <update id="update" parameterType="com.tft.forthefuture.Accountbook.Vo.Transaction">
+        UPDATE transactions
+        SET account_id = #{accountId},
+            transaction_type = #{transactionType},
+            amount = #{amount},
+            category = #{category},
+            description = #{description},
+            transaction_date = #{transactionDate},
+            updated_at = NOW()
+        WHERE id = #{id} AND user_id = #{userId}
+    </update>
+
+    <!-- 거래 내역 삭제 -->
+    <delete id="delete" parameterType="Long">
+        DELETE FROM transactions
+        WHERE id = #{id}
+    </delete>
+</mapper>

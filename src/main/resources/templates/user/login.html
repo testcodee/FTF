@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTF - 로그인</title>
+    <link rel="stylesheet" href="/css/user/login.css"> <!-- 새로운 CSS 파일로 분리하여 관리 추천 -->
+    <script src="/js/user/login.js"></script>
+</head>
+<body>
+<div class="login-wrapper">
+    <div class="login-container">
+        <h1 class="logo">FTF</h1> <!-- 로고 대신 프로젝트명 사용 -->
+        <form th:action="@{/login}" method="post" class="login-form">
+            <!-- 오류 메시지 표시 -->
+            <div th:if="${error}" class="error-message" th:text="${error}"></div>
+
+            <input type="text" name="username" placeholder="아이디" required />
+            <input type="password" name="password" placeholder="비밀번호" required />
+            <button type="submit" class="login-btn">로그인</button>
+        </form>
+
+        <div class="divider">
+            <div class="line"></div>
+            <p>또는</p>
+            <div class="line"></div>
+        </div>
+
+
+        <a href="/forgot-password" class="forgot-password-link">비밀번호를 잊으셨나요?</a>
+    </div>
+
+    <div class="signup-container">
+        <p>계정이 없으신가요? <a href="/signup">가입하기</a></p>
+    </div>
+</div>
+</body>
+</html>

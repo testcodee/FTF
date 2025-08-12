@@ -1,0 +1,55 @@
+
+-- User Table
+CREATE TABLE users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '사용자 고유 식별자',
+    username VARCHAR(50) NOT NULL UNIQUE COMMENT '로그인 아이디',
+    password VARCHAR(255) NOT NULL COMMENT '해시된 비밀번호',
+    name VARCHAR(100) NOT NULL COMMENT '사용자 이름',
+    nickname VARCHAR(100) COMMENT '사용자 별명',
+    email VARCHAR(100) UNIQUE COMMENT '이메일 주소 (비밀번호 찾기, 인증 등)',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '사용자 계정 생성 일시',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '사용자 정보 마지막 수정 일시'
+) COMMENT='서비스 사용자 정보 테이블'; -- 테이블 전체에 대한 코멘트
+
+
+-- 가계부 계좌 - 현금, 통장, 신용카드
+CREATE TABLE accounts (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '계좌 고유 식별자',
+    user_id BIGINT NOT NULL COMMENT '사용자 ID (FK)',
+    account_name VARCHAR(100) NOT NULL COMMENT '계좌명 (예: 현금, 우리은행 통장, 국민카드)',
+    account_type VARCHAR(50) NOT NULL COMMENT '계좌 유형 (예: 현금, 은행, 신용카드, 투자)',
+    balance DECIMAL(18, 2) DEFAULT 0.00 COMMENT '현재 잔액', -- 현재 잔액은 실시간 계산이 아님
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) COMMENT='사용자의 자금 관리 계좌 정보';
+
+-- 가계부 거래내역
+CREATE TABLE transactions (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '거래 고유 식별자',
+    user_id BIGINT NOT NULL COMMENT '사용자 ID (FK)',
+    account_id BIGINT NOT NULL COMMENT '관련 계좌 ID (FK)',
+    transaction_type VARCHAR(20) NOT NULL COMMENT '거래 유형 (예: INCOME, EXPENSE, TRANSFER)',
+    amount DECIMAL(18, 2) NOT NULL COMMENT '거래 금액',
+    category VARCHAR(100) COMMENT '거래 카테고리 (예: 식비, 교통비, 급여)',
+    description VARCHAR(255) COMMENT '거래 상세 설명 (사용처/내역 파싱 결과)',
+    transaction_date DATE NOT NULL COMMENT '거래 발생 일자',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE
+) COMMENT='가계부 거래 내역';
+
+-- 사용자별/공용 가계부 카테고리
+CREATE TABLE categories (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '카테고리 고유 ID',
+    user_id BIGINT COMMENT '사용자 ID (NULL 허용: 공용 카테고리)', -- NULL이면 기본/공용 카테고리, 특정 사용자 ID면 사용자 정의 카테고리
+    category_name VARCHAR(100) NOT NULL COMMENT '카테고리명 (예: 식비, 교통비, 급여)',
+    category_type VARCHAR(20) NOT NULL COMMENT '카테고리 유형 (INCOME, EXPENSE)', -- 수입/지출 카테고리 구분
+    icon_name VARCHAR(50) COMMENT '카테고리 아이콘명 (선택 사항)', -- 예: fa-cutlery
+    display_order INT DEFAULT 0 COMMENT '정렬 순서',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY ux_user_category (user_id, category_name) -- 사용자별 카테고리명 중복 방지
+    -- FOREIGN KEY (user_id) REFERENCES umsers(id) ON DELETE CASCADE
+) COMMENT='사용자별/공용 가계부 카테고리';
