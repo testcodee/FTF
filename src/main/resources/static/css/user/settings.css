@@ -107,3 +107,26 @@ h2 {
     color: #721c24;
     border: 1px solid #f5c6cb;
 }
+
+.back-button-container {
+    margin-bottom: 20px;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.back-button:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.back-icon {
+    margin-right: 5px;
+    font-size: 18px;
+}

@@ -12,7 +12,7 @@
         &#9776;
     </button>
     <div class="welcome-msg">
-        <span class="nickname" th:text="${user.name}">별명</span> 님 안녕하세요
+        <a th:href="@{/settings}" class="nickname=link"><span class="nickname" th:text="${user.nickname}">별명</span></a> 님 안녕하세요
     </div>
 </header>
 
