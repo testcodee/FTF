@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FTF - 나의 자산</title>
+  <link rel="stylesheet" href="/css/account/assets.css"> <!-- 새 CSS 파일 연결 -->
+</head>
+<body>
+<div class="header-container">
+  <div class="back-button-container">
+    <a href="javascript:history.back()" class="back-button">
+      <span class="back-icon">&#8592;</span> 뒤로가기
+    </a>
+  </div>
+  <h1 class="page-title">나의 자산</h1>
+</div>
+
+<main class="container">
+  <!-- 전체 자산 요약 섹션 -->
+  <section class="summary-section section">
+    <h2 class="section-title">자산 요약</h2>
+    <div class="summary-cards">
+      <div class="summary-card">
+        <h3>총 자산</h3>
+        <p th:text="${totalAssets != null ? #numbers.formatDecimal(totalAssets, 0, 'COMMA', 0, 'POINT') + '원' : '0원'}">0원</p>
+      </div>
+      <div class="summary-card debt">
+        <h3>총 부채</h3>
+        <p th:text="${totalDebt != null ? #numbers.formatDecimal(totalDebt, 0, 'COMMA', 0, 'POINT') + '원' : '0원'}">0원</p>
+      </div>
+      <div class="summary-card net-worth">
+        <h3>순 자산</h3>
+        <p th:text="${netWorth != null ? #numbers.formatDecimal(netWorth, 0, 'COMMA', 0, 'POINT') + '원' : '0원'}">0원</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 계좌 목록 및 잔액 수정 섹션 -->
+  <section class="accounts-section section">
+    <h2 class="section-title">계좌별 잔액 관리</h2>
+    <form id="accountUpdateForm" th:action="@{/accounts/update}" method="post">
+      <div class="account-list">
+        <div class="account-item" th:each="account : ${accounts}">
+          <input type="hidden" name="accountId" th:value="${account.id}" /> <!-- 계좌 ID 숨김 필드 -->
+          <div class="account-info">
+            <span class="account-name" th:text="${account.accountName}">현금</span>
+            <span class="account-type" th:text="${'(' + account.accountType + ')'}">(현금)</span>
+          </div>
+          <div class="account-balance">
+            <input type="number"
+                   name="balance"
+                   th:value="${account.balance}"
+                   class="balance-input"
+                   step="0.01"
+                   min="0" /> <!-- 화폐 단위에 따라 min 설정 변경 -->
+            <span class="currency-unit">원</span>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="submit-btn">잔액 업데이트</button>
+    </form>
+    <p th:if="${message}" class="status-message success-message" th:text="${message}"></p>
+    <p th:if="${error}" class="status-message error-message" th:text="${error}"></p>
+  </section>
+
+  <!-- 새로운 계좌 추가 버튼 (추후 확장) -->
+  <div class="add-account-section">
+    <a href="#" class="add-account-btn">새 계좌 추가</a>
+  </div>
+</main>
+
+<script th:inline="javascript">
+  // JavaScript에서 숫자를 입력받을 때 콤마를 제거하거나 유효성 검사를 추가할 수 있습니다.
+  // 현재는 type="number"를 사용하여 브라우저 기본 동작을 따릅니다.
+
+  // 메시지 자동 사라짐 (선택 사항)
+  const statusMessages = document.querySelectorAll('.status-message');
+  if (statusMessages.length > 0) {
+    statusMessages.forEach(msg => {
+      setTimeout(() => {
+        msg.style.opacity = '0';
+        setTimeout(() => msg.remove(), 500);
+      }, 3000); // 3초 후 사라짐
+    });
+  }
+
+  // 잔액 입력 시 콤마 제거 및 숫자 변환 로직 (필요 시)
+  document.querySelectorAll('.balance-input').forEach(input => {
+    input.addEventListener('focus', function() {
+      // 입력 필드 포커스 시 콤마 제거
+      this.value = this.value.replace(/,/g, '');
+    });
+    input.addEventListener('blur', function() {
+      // 입력 필드 포커스 벗어날 시 콤마 추가 (옵션)
+      if (this.value) {
+        this.value = parseFloat(this.value).toLocaleString('ko-KR');
+      }
+    });
+  });
+</script>
+</body>
+</html>
