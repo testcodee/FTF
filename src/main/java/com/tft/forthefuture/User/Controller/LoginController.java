@@ -42,4 +42,11 @@ public class LoginController {
             return "/user/login";
         }
     }
+    
+    // 로그아웃 세션 제거 후 로그인 화면으로
+    @GetMapping("logout")
+    public String logout(HttpSession session){
+        session.removeAttribute("loggedInUser");
+        return "/user/login";
+    }
 }
