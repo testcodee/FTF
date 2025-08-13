@@ -10,12 +10,12 @@
     </select>
 
     <insert id="insert" parameterType="User">
-        INSERT INTO users (username, password, name, email, created_at, updated_at)
-        VALUES (#{username}, #{password}, #{name}, #{email}, #{createdAt}, #{updatedAt})
+        INSERT INTO users (username, password, name, nickname, email, created_at, updated_at)
+        VALUES (#{username}, #{password}, #{name}, #{nickname}, #{email}, #{createdAt}, #{updatedAt})
     </insert>
 
     <select id="findByUsername" parameterType="String" resultType="com.tft.forthefuture.User.Vo.User">
-        SELECT id, username, password, name, email, created_at, updated_at
+        SELECT id, username, password, nickname, name, email, created_at, updated_at
         FROM users
         WHERE username = #{username}
     </select>
