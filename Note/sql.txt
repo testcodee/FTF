@@ -1,5 +1,6 @@
-
--- User Table
+/*--------------------------------------------------------------------
+유저 테이블
+--------------------------------------------------------------------*/
 CREATE TABLE users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '사용자 고유 식별자',
     username VARCHAR(50) NOT NULL UNIQUE COMMENT '로그인 아이디',
@@ -11,8 +12,9 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '사용자 정보 마지막 수정 일시'
 ) COMMENT='서비스 사용자 정보 테이블'; -- 테이블 전체에 대한 코멘트
 
-
--- 가계부 계좌 - 현금, 통장, 신용카드
+/*--------------------------------------------------------------------
+가계부 계좌 - 현금, 통장, 신용카드
+--------------------------------------------------------------------*/
 CREATE TABLE accounts (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '계좌 고유 식별자',
     user_id BIGINT NOT NULL COMMENT '사용자 ID (FK)',
@@ -24,7 +26,9 @@ CREATE TABLE accounts (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) COMMENT='사용자의 자금 관리 계좌 정보';
 
--- 가계부 거래내역
+/*--------------------------------------------------------------------
+가계부 거래내역
+--------------------------------------------------------------------*/
 CREATE TABLE transactions (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '거래 고유 식별자',
     user_id BIGINT NOT NULL COMMENT '사용자 ID (FK)',
@@ -40,7 +44,9 @@ CREATE TABLE transactions (
     FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE
 ) COMMENT='가계부 거래 내역';
 
--- 사용자별/공용 가계부 카테고리
+/*--------------------------------------------------------------------
+사용자별/공용 가계부 카테고리
+--------------------------------------------------------------------*/
 CREATE TABLE categories (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '카테고리 고유 ID',
     user_id BIGINT COMMENT '사용자 ID (NULL 허용: 공용 카테고리)', -- NULL이면 기본/공용 카테고리, 특정 사용자 ID면 사용자 정의 카테고리
