@@ -28,9 +28,6 @@ public class AccountController {
     @GetMapping("/assets")
     public String assets(Model model, HttpSession session) {
         User user = (User) session.getAttribute("loggedInUser");
-        if (user == null) {
-            return "redirect:/login";
-        }
 
         List<Account> accounts = accountService.getAccountByUserId(user.getId());
         BigDecimal totalAssets = accountService.findTotalBalanceByUserId(user.getId());

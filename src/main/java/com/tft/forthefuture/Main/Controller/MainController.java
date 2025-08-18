@@ -32,9 +32,7 @@ public class MainController {
     @GetMapping("/main")
     public String main(HttpSession session, Model model){
         User user = (User) session.getAttribute("loggedInUser");
-        if (user == null) {
-            return "redirect:/login";
-        }
+
         model.addAttribute("user", user);
 
         // -- 실제 데이터 가져오기 --

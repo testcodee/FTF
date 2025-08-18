@@ -22,10 +22,6 @@ public class UserController {
     public String showSetting(Model model, HttpSession session){
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         
-        if(loggedInUser==null){ //로그인 세션이 없을경우 로그인 페이지로 되돌아감
-            return "redirect:/user/login";
-        }
-        
         model.addAttribute("user", loggedInUser);
         
         return "/user/settings";
@@ -59,7 +55,6 @@ public class UserController {
                                  @RequestParam String newPassword,
                                  @RequestParam String confirmPassword){
         User loggedInUser = (User) session.getAttribute("loggedInUser");
-        if(loggedInUser==null){return "redirect:/user/login";}
 
         try{
             if(!newPassword.equals(confirmPassword)){
