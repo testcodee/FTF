@@ -31,16 +31,7 @@ public class AccountController {
         if (user == null) {
             return "redirect:/login";
         }
-        /*TODO List
-        * 1. 총 자산
-        * 2. 총 부채
-        * 3. 순 자산
-        * 4. 계좌 별 잔액 관리
-        *  - accounts 테이블
-        *   balance : 현재 잔액
-        *   account_name : 계좌명 (예: 현금, 우리은행 통장, 국민카드)
-        *   account_type : 계좌 유형 (예: 현금, 은행, 신용카드, 투자)
-        * */
+
         List<Account> accounts = accountService.getAccountByUserId(user.getId());
         BigDecimal totalAssets = accountService.findTotalBalanceByUserId(user.getId());
         BigDecimal totalDebt = accountService.findTotalDebtByUserId(user.getId());

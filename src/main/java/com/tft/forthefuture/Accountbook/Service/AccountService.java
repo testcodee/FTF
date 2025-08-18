@@ -20,6 +20,7 @@ public class AccountService {
         this.transactionMapper = transactionMapper;
     }
 
+    // 계좌 (카드, 은행 등) 아이디로 조회
     public List<Account> getAccountByUserId(Long userId) {
        return accountMapper.findAllByUserId(userId);
     }
@@ -29,9 +30,8 @@ public class AccountService {
         return accountMapper.findTotalBalanceByUserId(userId);
     }
 
-    public BigDecimal findTotalDebtByUserId(Long userId) {
-        return accountMapper.findTotalDebtByUserId(userId);
-    }
+    // 부채 총액
+    public BigDecimal findTotalDebtByUserId(Long userId) { return accountMapper.findTotalDebtByUserId(userId); }
 
 
 }
