@@ -11,6 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @Controller
 public class AccountController {
     private AccountService accountService;
@@ -38,11 +41,15 @@ public class AccountController {
         *   account_name : 계좌명 (예: 현금, 우리은행 통장, 국민카드)
         *   account_type : 계좌 유형 (예: 현금, 은행, 신용카드, 투자)
         * */
-        Account account = accountService.getAccountByUserId(user.getId());
+        List<Account> accounts = accountService.getAccountByUserId(user.getId());
+        BigDecimal totalAssets = accountService.findTotalBalanceByUserId(user.getId());
+        BigDecimal totalDebt = accountService.findTotalDebtByUserId(user.getId());
+        BigDecimal netWorth = totalAssets.add(totalDebt);
 
-        model.addAttribute("totalAssets","100000");
-        model.addAttribute("totalDebt","100000");
-        model.addAttribute("netWorth","-100000");
+        model.addAttribute("accounts", accounts);
+        model.addAttribute("totalAssets",totalAssets);
+        model.addAttribute("totalDebt",totalDebt);
+        model.addAttribute("netWorth",netWorth);
 
         return "/account/assets";
     }

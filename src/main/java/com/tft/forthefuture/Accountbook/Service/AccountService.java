@@ -6,6 +6,9 @@ import com.tft.forthefuture.Accountbook.Vo.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @Service
 public class AccountService {
     AccountMapper accountMapper;
@@ -17,8 +20,17 @@ public class AccountService {
         this.transactionMapper = transactionMapper;
     }
 
-    public Account getAccountByUserId(Long userId) {
-       return accountMapper.findById(userId);
+    public List<Account> getAccountByUserId(Long userId) {
+       return accountMapper.findAllByUserId(userId);
+    }
+
+    // 계좌 총액 총 자산 계산
+    public BigDecimal findTotalBalanceByUserId(Long userId) {
+        return accountMapper.findTotalBalanceByUserId(userId);
+    }
+
+    public BigDecimal findTotalDebtByUserId(Long userId) {
+        return accountMapper.findTotalDebtByUserId(userId);
     }
 
 
