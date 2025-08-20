@@ -1,4 +1,4 @@
-package com.tft.forthefuture.Common.config;
+package com.tft.forthefuture.Common.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

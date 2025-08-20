@@ -1,4 +1,4 @@
-package com.tft.forthefuture.Common.config;
+package com.tft.forthefuture.Common.Config;
 
 import com.tft.forthefuture.User.Vo.User;
 import jakarta.servlet.http.HttpServletRequest;

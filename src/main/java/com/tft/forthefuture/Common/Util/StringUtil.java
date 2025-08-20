@@ -1,4 +1,4 @@
-package com.tft.forthefuture.Common.util;
+package com.tft.forthefuture.Common.Util;
 
 import org.springframework.util.StringUtils;
 

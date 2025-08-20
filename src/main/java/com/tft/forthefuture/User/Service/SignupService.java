@@ -1,6 +1,6 @@
 package com.tft.forthefuture.User.Service;
 
-import com.tft.forthefuture.Common.config.UserConfig;
+import com.tft.forthefuture.Common.Config.UserConfig;
 import com.tft.forthefuture.User.Mapper.UserMapper;
 import com.tft.forthefuture.User.Vo.User;
 import org.springframework.beans.factory.annotation.Autowired;

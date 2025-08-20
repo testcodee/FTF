@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -40,5 +40,15 @@ public class AccountController {
         model.addAttribute("netWorth",netWorth);
 
         return "/account/assets";
+    }
+
+    @PostMapping("/accounts/update")
+    @ResponseBody
+    public String updateAccount(Model model, HttpSession session, @RequestBody List<Account> accounts) {
+        User user = (User) session.getAttribute("loggedInUser");
+
+        accounts.forEach(account -> {System.out.println(account.getId() + " " + account.getBalance());});
+
+        return "redirect:/assets";
     }
 }
