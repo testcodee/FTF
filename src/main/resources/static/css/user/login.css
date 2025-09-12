@@ -1,11 +1,17 @@
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: #fafafa; /* 인스타그램 배경색 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif; /* 모바일 친화적 폰트 */
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    margin: 0;
+    margin: 0;               /* 기본 여백 제거 */
+    padding: 0;              /* 기본 패딩 제거 */
+    width: 100vw;            /* 뷰포트 가로폭 100% */
+    min-height: 100vh;       /* 최소 높이 100% 뷰포트 높이 */
+    font-size: 16px;         /* 기본 폰트 크기 - 모바일 기준 적절한 크기 */
+    line-height: 1.5;        /* 가독성 좋은 줄간격 */
+    background-color: rgba(143, 109, 183, 0.7);  /* 배경색 설정 */
+    box-sizing: border-box;  /* 패딩과 보더를 포함한 크기 계산 */
 }
 
 .login-wrapper {
