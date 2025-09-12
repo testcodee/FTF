@@ -17,7 +17,9 @@
 <div id="login-content" style="display:none;">
     <div class="login-wrapper">
         <div class="login-container">
-            <h1 class="logo">FTF</h1> <!-- 로고 대신 프로젝트명 사용 -->
+            <div class="loading-logo">
+                <img src="/images/logo.png" style="width:100%;height: 100%"/>
+            </div> <!-- 로고 대신 프로젝트명 사용 -->
             <form th:action="@{/login}" method="post" class="login-form">
                 <!-- 오류 메시지 표시 -->
                 <div th:if="${error}" class="error-message" th:text="${error}"></div>
