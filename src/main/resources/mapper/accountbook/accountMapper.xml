@@ -47,9 +47,9 @@
     </update>
 
     <!-- 계좌 잔액만 수정 -->
-    <update id="updateBalance">
+    <update id="updateBalance" parameterType="com.tft.forthefuture.Accountbook.Vo.Account">
         UPDATE accounts
-        SET balance = #{newBalance},
+        SET balance = #{balance},
             updated_at = NOW()
         WHERE id = #{id}
     </update>

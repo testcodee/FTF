@@ -21,7 +21,7 @@ public interface AccountMapper {
     // 계좌 추가/수정/삭제
     void insert(Account account);
     void update(Account account);
-    void updateBalance(Long id, BigDecimal newBalance);
+    void updateBalance(Account account);
     void delete(Long id);
 
     // 계좌 유형별 조회

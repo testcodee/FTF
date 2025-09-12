@@ -5,6 +5,7 @@ import com.tft.forthefuture.Accountbook.Mapper.TransactionMapper;
 import com.tft.forthefuture.Accountbook.Vo.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -33,5 +34,9 @@ public class AccountService {
     // 부채 총액
     public BigDecimal findTotalDebtByUserId(Long userId) { return accountMapper.findTotalDebtByUserId(userId); }
 
+    @Transactional // 예외 발생 시 트랜젝션 롤백
+    public void updateAccountBalances(List<Account> accounts) {
+        accounts.forEach(account -> {accountMapper.updateBalance(account);});
+    }
 
 }

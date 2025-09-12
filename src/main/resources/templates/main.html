@@ -5,18 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FTF - 메인 화면</title>
     <link rel="stylesheet" href="/css/main.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/main.js"></script>
 </head>
 <body>
 <header class="header">
-    <button class="menu-btn" aria-label="메뉴 열기">
-        &#9776;
-    </button>
     <div class="welcome-msg">
         <a th:href="@{/settings}" class="nickname=link"><span class="nickname" th:text="${user.nickname}">별명</span></a> 님 안녕하세요
     </div>
 </header>
 
 <main class="container">
+
+    <section class="section">
+        <h2 class="section-title">메인 메뉴</h2>
+        <div class="item-row">
+            <div class="item">
+                <div class="item-circle">
+                    <div class="item-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-fill" viewBox="0 0 16 16" >
+                            <path style ="fill:rgb(255,255,255);fill-rule:nonzero;" d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1H0zm0 3v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7zm3 2h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1"/>
+                        </svg>
+                    </div>
+                    <div class="item-title"><a class="item-label" href="/assets">자산등록</a></div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-circle"></div>
+                <a class="item-label" href="#">가계부 조회</a>
+            </div>
+            <div class="item">
+                <div class="item-circle"></div>
+                <a class="item-label" href="#">재정 목표</a>
+            </div>
+        </div>
+    </section>
+
+
     <section class="section">
         <h2 class="section-title">자산 현황 요약</h2>
         <div class="item-row">
@@ -38,19 +63,6 @@
         </div>
     </section>
 
-    <section class="section">
-        <h2 class="section-title" th:text="${goalName}">내 집 마련 플랜</h2>
-        <div style="width: 100%; background-color: #e0e0e0; border-radius: 5px; margin-top: 10px;">
-            <div style="width: 0%; "
-                 th:style="'width: ' + ${goalProgressPercentage} + '%;background-color: #007bff; height: 20px; border-radius: 5px; text-align: center; color: white;'">
-                <span th:text="${goalProgressPercentage + '%'}"></span>
-            </div>
-        </div>
-        <p style="margin-top: 10px;">
-            <span th:text="${goalAchievedAmount + '원'}"></span> / <span th:text="${goalTargetAmount + '원'}"></span> 달성
-        </p>
-    </section>
-
     <!-- 기존의 섹션 1,2,3 아이템은 Mock Data 예시로 사용하거나 제거 -->
     <section class="section">
         <h2 class="section-title">빠른 메뉴</h2>
@@ -69,6 +81,9 @@
             </div>
         </div>
     </section>
+
+
 </main>
+    <div id="bottom-nav"></div>
 </body>
 </html>

@@ -78,9 +78,10 @@ body {
 
 /* 원형 아이콘 */
 .item-circle {
-    width: 30px;
-    height: 30px;
-    background-color: #ddd;
+    width: 60px;
+    height: 60px;
+    background-color: #f3f5f7;
+    border:solid pink 5px;
     border-radius: 50%;
     margin-bottom: 8px;
 }
@@ -92,3 +93,45 @@ body {
     text-align: center;
 }
 
+.item-circle .item-icon{
+    display:inline-block;
+    left:50%;
+    position:relative;
+    margin-left:-8px;
+    margin-top:8px;
+}
+
+.item-title{
+    text-align: center;
+    color:#ffffff;
+}
+
+.item-title a{
+    text-align: center;
+    color:#ffffff;
+    text-decoration: none;
+}
+
+/* 하단 네비바 전체 */
+.bottom-nav{
+    border-top: solid #fefefe 1px;
+    position:fixed;
+    height:56px;
+    width:100%;
+    bottom:0;
+}
+
+/* 하단 네비바 행 */
+.bottom-nav-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 하단 네비바 아이템 */
+.bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30%;
+    height: 100%;
+}

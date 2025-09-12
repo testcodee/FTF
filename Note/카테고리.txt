@@ -20,3 +20,36 @@
  적금
  주식
  ETF
+
+ -- 카테고리 TABLE QUERY
+ CREATE TABLE categories (
+     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '카테고리 고유 ID',
+     user_id BIGINT COMMENT '사용자 ID (NULL 허용: 공용 카테고리)', -- NULL이면 기본/공용 카테고리, 특정 사용자 ID면 사용자 정의 카테고리
+     category_name VARCHAR(100) NOT NULL COMMENT '카테고리명 (예: 식비, 교통비, 급여)',
+     category_type VARCHAR(20) NOT NULL COMMENT '카테고리 유형 (INCOME, EXPENSE)', -- 수입/지출 카테고리 구분
+     icon_name VARCHAR(50) COMMENT '카테고리 아이콘명 (선택 사항)', -- 예: fa-cutlery
+     display_order INT DEFAULT 0 COMMENT '정렬 순서',
+     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+     UNIQUE KEY ux_user_category (user_id, category_name) -- 사용자별 카테고리명 중복 방지
+     -- FOREIGN KEY (user_id) REFERENCES umsers(id) ON DELETE CASCADE
+ ) COMMENT='사용자별/공용 가계부 카테고리';
+
+ -- 카테고리 INSERT QUERY
+ INSERT INTO categories (
+ 	user_id
+ 	,category_name
+ 	,category_type
+ 	,icon_name
+ 	,display_order
+ 	,created_at
+ 	,updated_at)
+ VALUES (
+ 	'comm'
+ 	,'식비'
+ 	,'EXPENSE'
+ 	,NULL
+ 	,'0'
+ 	,NOW()
+ 	,NOW()
+ );
