@@ -1,0 +1,23 @@
+/* 하단 네비바 전체 */
+.bottom-nav{
+    border-top: solid #fefefe 1px;
+    position:fixed;
+    height:56px;
+    width:100%;
+    bottom:0;
+}
+
+/* 하단 네비바 행 */
+.bottom-nav-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 하단 네비바 아이템 */
+.bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30%;
+    height: 100%;
+}

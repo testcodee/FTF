@@ -7,17 +7,7 @@ body {
     color: #333;
 }
 
-/* 헤더 스타일 */
-.header {
-    display: flex;
-    align-items: center;
-    padding: 12px 16px;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
+
 
 .menu-btn {
     font-size: 24px;
@@ -112,26 +102,4 @@ body {
     text-decoration: none;
 }
 
-/* 하단 네비바 전체 */
-.bottom-nav{
-    border-top: solid #fefefe 1px;
-    position:fixed;
-    height:56px;
-    width:100%;
-    bottom:0;
-}
 
-/* 하단 네비바 행 */
-.bottom-nav-row {
-    display: flex;
-    justify-content: space-between;
-}
-
-/* 하단 네비바 아이템 */
-.bottom-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 30%;
-    height: 100%;
-}
