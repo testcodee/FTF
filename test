@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login Screen</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --grad: linear-gradient(135deg, #ff6ea2, #ff9bb3);
+      --accent: #ff6ea2;
+      font-family: "Nunito", sans-serif;
+    }
+
+    body{
+      margin:0;
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background: linear-gradient(180deg,#ffd6e6,#ffc6d1);
+    }
+
+    .phone{
+      width:360px;
+      border-radius:28px;
+      background:#fff;
+      box-shadow:0 12px 30px rgba(255,105,150,0.15);
+      overflow:hidden;
+      border:8px solid rgba(255,255,255,0.6);
+    }
+
+    .screen{
+      min-height:600px;
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      padding:24px;
+      box-sizing:border-box;
+    }
+
+    /* Header curved shape */
+    .header-curve{
+      position:relative;
+      height:140px;
+      margin:-24px -24px 30px -24px;
+      background:var(--grad);
+      border-bottom-left-radius:60px;
+      border-bottom-right-radius:60px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 8px 16px rgba(255,105,150,0.25);
+    }
+
+    .logo-badge{
+      width:100px;
+      height:100px;
+      border-radius:50%;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      font-weight:700;
+      font-size:16px;
+      color:var(--accent);
+      box-shadow:0 6px 14px rgba(0,0,0,0.15);
+    }
+    .logo-badge span{
+      font-size:13px;
+      font-weight:400;
+      color:#999;
+    }
+
+    /* Form */
+    form{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      flex:1;
+    }
+
+    .input-group{
+      display:flex;
+      align-items:center;
+      background:#fdfdfd;
+      border:1px solid #f2d7df;
+      border-radius:12px;
+      padding:10px 14px;
+      box-shadow: inset 0 4px 10px rgba(255,105,150,0.05);
+    }
+    .input-group i{
+      margin-right:10px;
+      color:#ff9bb3;
+    }
+    .input-group input{
+      border:0;
+      outline:none;
+      flex:1;
+      font-size:15px;
+    }
+    .input-group input::placeholder{
+      color:#d9a8b5;
+    }
+
+    .btn{
+      margin-top:12px;
+      padding:14px;
+      border-radius:14px;
+      font-weight:700;
+      border:0;
+      cursor:pointer;
+      background:var(--grad);
+      color:white;
+      box-shadow:0 12px 22px rgba(255,105,150,0.25);
+      transition: all .2s ease;
+    }
+    .btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 14px 28px rgba(255,105,150,0.35);
+    }
+
+    .quick{
+      font-size:13px;
+      color:#dba4b9;
+      text-align:center;
+      margin-top:20px;
+      margin-bottom:10px;
+    }
+
+    .social-login{
+      display:flex;
+      justify-content:center;
+      gap:14px;
+    }
+    .social-btn{
+      width:44px;
+      height:44px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#f5f5f5;
+      box-shadow:0 4px 8px rgba(0,0,0,0.08);
+      cursor:pointer;
+      transition:transform .15s;
+    }
+    .social-btn:hover{
+      transform:scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="screen">
+      <div class="header-curve">
+        <div class="logo-badge">
+          KiShi<br/>Coming
+          <span>Welcome</span>
+        </div>
+      </div>
+
+      <form onsubmit="event.preventDefault(); alert('로그인 시뮬레이션');">
+        <div class="input-group">
+          <i>👤</i>
+          <input type="text" placeholder="Enter account number" required />
+        </div>
+
+        <div class="input-group">
+          <i>🔒</i>
+          <input type="password" placeholder="Enter password" required />
+        </div>
+
+        <button class="btn" type="submit">Sign up</button>
+      </form>
+
+      <div class="quick">Quick Login</div>
+      <div class="social-login">
+        <div class="social-btn">G</div>
+        <div class="social-btn">f</div>
+        <div class="social-btn">🍎</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
