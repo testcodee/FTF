@@ -16,8 +16,8 @@ public class ComponentsController {
     @GetMapping("/components/header")
     public String getHeader(HttpSession session, Model model){
 
+        // 세션에서 User정보 받아서 Header에 user정보 표시
         User user = (User) session.getAttribute("loggedInUser");
-
         model.addAttribute("user", user);
 
         return "components/header";
