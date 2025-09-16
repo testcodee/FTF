@@ -30,7 +30,7 @@ body {
 .back-button {
     display: inline-flex;
     align-items: center;
-    color: #007bff;
+    color: rgba(143, 109, 183, 0.7);
     text-decoration: none;
     font-weight: 500;
     font-size: 16px;
@@ -38,7 +38,7 @@ body {
 }
 
 .back-button:hover {
-    color: #0056b3;
+    color: rgba(143, 109, 183);
     text-decoration: underline;
 }
 
@@ -188,7 +188,7 @@ body {
     width: 100%;
     padding: 12px;
     margin-top: 25px;
-    background-color: #007bff;
+    background-color: rgba(143, 109, 183, 0.7);
     color: white;
     border: none;
     border-radius: 6px;
@@ -199,7 +199,7 @@ body {
 }
 
 .submit-btn:hover {
-    background-color: #0056b3;
+    background-color: rgba(143, 109, 183);
 }
 
 /* 새 계좌 추가 버튼 */
