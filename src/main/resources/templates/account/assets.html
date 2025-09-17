@@ -44,11 +44,11 @@
             <span class="account-type" th:text="${'(' + account.accountType + ')'}">(현금)</span>
           </div>
           <div class="account-balance">
-            <input type="number"
+            <input type="text"
                    name="balance"
-                   th:value="${account.balance}"
+                   th:value="${#numbers.formatDecimal(account.balance,0,'NONE',0,'POINT') }"
                    class="balance-input"
-                   step="0.01"
+                   step="0"
                    min="0" /> <!-- 화폐 단위에 따라 min 설정 변경 -->
             <span class="currency-unit">원</span>
           </div>
@@ -89,9 +89,13 @@
       this.value = this.value.replace(/,/g, '');
     });
     input.addEventListener('blur', function() {
-      // 입력 필드 포커스 벗어날 시 콤마 추가 (옵션)
-      if (this.value) {
-        this.value = parseFloat(this.value).toLocaleString('ko-KR');
+      // 숫자만 남기고 다른 문자 제거
+      const value = this.value.replace(/[^\d.-]/g, '');
+      const number = parseFloat(value);
+
+      if (!isNaN(number)) {
+        // 유효한 숫자인 경우에만 포맷팅
+        this.value = number.toLocaleString('ko-KR');
       }
     });
   });
