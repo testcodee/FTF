@@ -12,7 +12,7 @@ $(document).ready(function() {
             $('#assets').addClass('active');
         } else if(uriName === "/account"){
             $('#account').addClass('active');
-        } else if(uriName === "more"){
+        } else if(uriName === "/more"){
             $('#more').addClass('active');
         } else{
             $('#main').addClass('active');
