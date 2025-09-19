@@ -8,17 +8,42 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/main.js"></script>
     <script src="/js/components/components-loader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome (아이콘 사용 시) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 </head>
 <body>
 <header id="header" class="header"></header>
 
 <main class="container">
 
-    <section class="section">
-
+    <!-- 🎯 1단계: 상단 필터 및 요약 (추후 확장) -->
+    <section class="summary-section section">
+        <h2 class="section-title">월간 지출 요약 (2025년 9월)</h2>
+        <div class="summary-cards">
+            <div class="summary-card">
+                <h3>총 지출</h3>
+                <p id="total-expense">0원</p>
+            </div>
+            <!-- 총 수입 등 다른 요약 카드 추가 가능 -->
+        </div>
     </section>
 
+    <!-- 🎯 2단계: 원형 그래프 영역 -->
+    <section class="chart-section section">
+        <h2 class="section-title">카테고리별 지출</h2>
+        <div class="chart-wrapper">
+            <canvas id="categoryExpenseChart"></canvas>
+        </div>
+    </section>
 
+    <!-- 🎯 3단계: 카테고리 리스트 (아이콘 + 색상) -->
+    <section class="category-list-section section">
+        <h2 class="section-title">카테고리 상세</h2>
+        <ul id="categoryList" class="category-list">
+            <!-- JavaScript로 동적으로 생성될 예정 -->
+        </ul>
+    </section>
 </main>
     <div id="bottom-nav"></div>
 </body>
