@@ -53,6 +53,7 @@ CREATE TABLE categories (
     category_name VARCHAR(100) NOT NULL COMMENT '카테고리명 (예: 식비, 교통비, 급여)',
     category_type VARCHAR(20) NOT NULL COMMENT '카테고리 유형 (INCOME, EXPENSE)', -- 수입/지출 카테고리 구분
     icon_name VARCHAR(50) COMMENT '카테고리 아이콘명 (선택 사항)', -- 예: fa-cutlery
+    icon_rgb VARCHAR(50) COMMENT '카테고리 아이콘 색상',
     display_order INT DEFAULT 0 COMMENT '정렬 순서',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

@@ -1,5 +1,22 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // 🎯 더미 데이터 (실제로는 백엔드에서 Fetch API 등으로 가져올 데이터)
+
+    $.ajax({
+        url : '/accounts/statistics',
+        method : 'post',
+        data : '',
+        dataType : 'html',
+        success: function(data, status){
+            const expendData = JSON.parse(data); // model(JSON) > Array형식으로 변환
+            init(expendData);
+        },
+        error : function(data, status){
+        },
+        complete: function(){
+
+        }
+    });
+
+
     // 아이콘 클래스는 Font Awesome을 예시로 들었습니다.
     // 색상은 각 카테고리에 할당될 고유한 색상입니다.
     const rawSpendingData = [
@@ -40,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
         options: {
             responsive: true,
             maintainAspectRatio: false, // 컨테이너에 맞춰 크기 조절
-            cutout: '70%', // 도넛 차트의 두께 (숫자가 클수록 얇아짐)
+            cutout: '90%', // 도넛 차트의 두께 (숫자가 클수록 얇아짐)
             plugins: {
                 tooltip: {
                     callbacks: {
@@ -98,3 +115,25 @@ document.addEventListener('DOMContentLoaded', function() {
         categoryListElement.appendChild(listItem);
     });
 });
+
+const init = function(expendData){
+    const rawSpendingData = dataSetting(data); // 데이터 세팅
+}
+
+const dataSetting = function(data){
+    // 아이콘 클래스는 Font Awesome을 예시로 들었습니다.
+    // 색상은 각 카테고리에 할당될 고유한 색상입니다.
+    const rawSpendingData = [
+        { category: '식비', amount: 350000, iconClass: 'fas fa-utensils', color: '#FF6384' },
+        { category: '교통', amount: 120000, iconClass: 'fas fa-bus', color: '#36A2EB' },
+        { category: '카페/간식', amount: 80000, iconClass: 'fas fa-coffee', color: '#FFCE56' },
+        { category: '문화생활', amount: 0, iconClass: 'fas fa-film', color: '#4BC0C0' }, // 지출 0
+        { category: '쇼핑', amount: 200000, iconClass: 'fas fa-shopping-bag', color: '#9966FF' },
+        { category: '통신', amount: 50000, iconClass: 'fas fa-phone', color: '#FF9F40' },
+        { category: '생활용품', amount: 70000, iconClass: 'fas fa-lightbulb', color: '#C9CBCF' },
+        { category: '월세', amount: 500000, iconClass: 'fas fa-home', color: '#7E7A7A' }
+    ];
+
+    return rawSpendingData;
+}
+

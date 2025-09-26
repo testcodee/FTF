@@ -57,4 +57,14 @@ public class AccountController {
                     .body(Map.of("error", "잔액 업데이트 중 오류가 발생했습니다: " + e.getMessage()));
         }
     }
+
+    @PostMapping("/accounts/statistics")
+    @ResponseBody
+    public ResponseEntity<?> statistics(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("loggedInUser");
+        BigDecimal totalDebt = accountService.findTotalDebtByUserId(user.getId());
+        model.addAttribute("totalDebt",totalDebt);
+        model.addAttribute("userId",user.getId());
+        return new ResponseEntity<>(model, HttpStatus.OK);
+    }
 }
