@@ -1,26 +1,76 @@
-헤어,메이크업 수정사항 체크
+[T 다이렉트 웹]  
+-T다이렉트샵>휴대폰>5G휴대폰 화면 점검  
+https://shop.tworld.co.kr/wireless/product/list?categoryId=20010014
+-T다이렉트샵>휴대폰>휴대폰 화면 점검  
+https://shop.tworld.co.kr/wireless/product/list?categoryId=20010001
+-T다이렉트샵>휴대폰>키즈폰 화면 점검  
+https://shop.tworld.co.kr/wireless/product/list?categoryId=20010005
+-T다이렉트샵>휴대폰>5G태블릿 화면 점검  
+https://shop.tworld.co.kr/wireless/product/list?categoryId=20010015
+-T다이렉트샵>휴대폰>태블릿 화면 점검  
+https://shop.tworld.co.kr/wireless/product/list?categoryId=20010002
+-T다이렉트샵>휴대폰>스마트워치 화면 점검  
+https://shop.tworld.co.kr/wireless/product/list?categoryId=20010003
+-T다이렉트샵>휴대폰>휴대용와이파이 화면 점검  
+https://shop.tworld.co.kr/wireless/product/list?categoryId=20010004
+-5G휴대폰or휴대폰 주문 프로세스 점검  
+-T다이렉트샵>인터넷/IPTV>인터넷/IPTV 화면 점검  
+https://shop.tworld.co.kr/wire/main
+-T다이렉트샵>인터넷/IPTV>무선/인터넷결합 화면 점검  
+-T다이렉트샵>T우주티다 화면 점검(추가)
+-T다이렉트샵>자급제/쓰던폰 화면 점검(추가)
+-T다이렉트샵>액세서리 화면 점검 
+-T다이렉트샵>액세서리 주문 프로세스 점검  
+-T다이렉트샵>기획전/기획전 상세 화면 점검  
+https://shop.tworld.co.kr/exhibition/submain
+-T다이렉트샵>나의쇼핑 주문내역 조회  
+-Tworld>myT>주문확인 주문내역 조회  
+-T다이렉트샵>차원이다른혜택 화면 점검  
+-T다이렉트샵>공시지원금 화면 점검  
+https://shop.tworld.co.kr/exhibition/view?exhibitionId=P00000462
 
-부케, 코사지 예약 확인(2주전)
+[T 다이렉트 모바일]  
+-Shop>휴대폰>5G휴대폰 화면 점검  
+https://m.shop.tworld.co.kr/wireless/product/list?categoryId=20010014
+-Shop>휴대폰>휴대폰 화면 점검  
+https://m.shop.tworld.co.kr/wireless/product/list?categoryId=20010001
+-Shop>휴대폰>키즈폰 화면 점검  
+https://m.shop.tworld.co.kr/wireless/product/list?categoryId=20010005
+-Shop>휴대폰>5G태블릿 화면 점검  
+https://m.shop.tworld.co.kr/wireless/product/list?categoryId=20010015
+-Shop>휴대폰>태블릿 화면 점검  
+https://m.shop.tworld.co.kr/wireless/product/list?categoryId=20010002
+-Shop>휴대폰>스마트워치 화면 점검  
+https://m.shop.tworld.co.kr/wireless/product/list?categoryId=20010003
+-Shop>휴대폰>휴대용와이파이 화면 점검  
+https://m.shop.tworld.co.kr/wireless/product/list?categoryId=20010004
+-Shop>휴대폰>자급제/중고폰 개통 화면 점검  
+-5G휴대폰or휴대폰 주문 프로세스 점검  
+-Shop>인터넷/IPTV>인터넷/IPTV 화면 점검  
+https://m.shop.tworld.co.kr/wire/main
+https://m.shop.tworld.co.kr/wire/product/internetList
+https://m.shop.tworld.co.kr/wire/product/iptvList
+-Shop>인터넷/IPTV>무선/인터넷결합 화면 점검 
+https://m.shop.tworld.co.kr/wire/product/combinedList 
+-T다이렉트샵>T우주티다 화면 점검(추가)
+-T다이렉트샵>자급제/쓰던폰 화면 점검(추가)
+-Shop>액세서리 화면 점검  
+-Shop>액세서리 주문 프로세스 점검  
+-Shop>기획전/기획전 상세 화면 점검  
+https://m.shop.tworld.co.kr/exhibition/submain
+-Shop>나의쇼핑 주문내역 조회  
+-Shop>myT>주문확인 주문내역 조회  
+-Shop>차원이다른혜택 화면 점검  
+-Shop>공시지원금 화면 점검  
 
-입장, 행진곡 음원 준비
+[11번가]  
+-휴대폰샵 영역 화면 점검  
+https://phone.11st.co.kr/tLounge/home.tmall
+-휴대폰샵 주문 프로세스 점검  
 
-성혼선혼문 준비
+[카카오]  
+-카카오>카카오전용페이지 화면 점검  
+https://chat.tworld.co.kr:17443/sharedfront/jsp/view/chatWindowOfReact.jsp 
+-카카오>카카오주문 프로세스 점검 
 
-축가, 축사 확인
- - 음원준비 + 멘트 미리 확인
  
-신혼여행 짐싸기
-
-보증인원 파악
-
-스냅, DVD, 포토부스 예약, 잔금 확인 입금
-
-염색, 커트, 네일
-
-예식장 식순 확인
-
-사회자 대본 확인하기
-
-
-
-https://go.slack.com/get-started/enQtOTYwMDY0NDE0OTI0OC0wMzNiOGRmOTM2OWZhN2YwMjhiYjc4ZjE2NTcwYmQ4NGIyNDllMWM2NDAzNDU1NmE1YTE0OTllZTU3YTQ3M2Zl?e=c2t0LnAyMDM5NjBAcGFydG5lci5zay5jb20%3D&i=default&m=slack&x=x-a9577933675588
