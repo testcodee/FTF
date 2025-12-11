@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>가계부 메인</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/Main/main.css">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <button id="prevMonthBtn">&lt;</button>
+        <span class="current-month" th:text="${currentMonth}">2025년 11월</span>
+        <button id="nextMonthBtn">&gt;</button>
+    </div>
+
+    <div class="summary-cards">
+        <div class="card">
+            <div class="card-title">총 수입</div>
+            <div class="income" th:text="${totalIncome}">+ 2,500,000원</div>
+        </div>
+        <div class="card">
+            <div class="card-title">총 지출</div>
+            <div class="expense" th:text="${totalExpense}">- 1,200,000원</div>
+        </div>
+        <div class="card">
+            <div class="card-title">남은 잔액</div>
+            <div class="balance" th:text="${balance}">1,300,000원</div>
+        </div>
+    </div>
+
+    <div class="chart-section">
+        <div class="chart-title">이번 달 지출 비중</div>
+        <div class="chart-placeholder">
+            [도넛 차트 Placeholder: 식비 30%, 교통 20%...]
+        </div>
+    </div>
+
+    <div class="alert-card">
+        <p style="color: #F44336;"><i class="fas fa-exclamation-circle"></i> 이번 달 식비 예산 **50,000원** 남았어요!</p>
+        <p style="color: #4CAF50;"><i class="fas fa-arrow-up"></i> 지난 달 대비 지출이 **10%** 감소했어요.</p>
+    </div>
+
+    <div class="transactions-section">
+        <div class="transactions-title">최근 거래 내역</div>
+
+        <div class="transaction-day">오늘</div>
+        <div class="transaction-item">
+            <div class="transaction-info">
+                <strong>스타벅스</strong>
+                <span class="transaction-category">오후 3:30 | 식비</span>
+            </div>
+            <div class="transaction-amount expense">- 5,500원</div>
+        </div>
+        <div class="transaction-item">
+            <div class="transaction-info">
+                <strong>급여 입금</strong>
+                <span class="transaction-category">오전 10:00 | 수입</span>
+            </div>
+            <div class="transaction-amount income">+ 2,000,000원</div>
+        </div>
+
+        <div class="transaction-day">11월 22일</div>
+        <div class="transaction-item">
+            <div class="transaction-info">
+                <strong>이마트</strong>
+                <span class="transaction-category">오후 7:00 | 장보기</span>
+            </div>
+            <div class="transaction-amount expense">- 45,000원</div>
+        </div>
+
+        <a href="#" class="more-link">전체 거래 내역 보기 &gt;</a>
+    </div>
+
+    <div class="fab" id="fabButton">+</div>
+
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active"><i class="fas fa-home"></i>메인</a>
+        <a href="#" class="nav-item"><i class="fas fa-chart-bar"></i>통계</a>
+        <a href="#" class="nav-item"><i class="fas fa-list-alt"></i>내역</a>
+        <a href="#" class="nav-item"><i class="fas fa-cog"></i>설정</a>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // FAB 버튼 클릭 이벤트 (jQuery 사용 예시)
+        $('#fabButton').on('click', function() {
+            alert('지출/수입 추가 팝업을 띄웁니다.');
+            // 실제 구현 시: 팝업 모달을 표시하거나, 내역 추가 페이지로 이동
+        });
+
+        // 월 이동 버튼 클릭 이벤트 (jQuery 사용 예시)
+        $('#prevMonthBtn').on('click', function() {
+            // TODO: 이전 달 데이터 요청 로직 (Ajax/fetch 사용)
+            alert('이전 달로 이동!');
+        });
+
+        $('#nextMonthBtn').on('click', function() {
+            // TODO: 다음 달 데이터 요청 로직 (Ajax/fetch 사용)
+            alert('다음 달로 이동!');
+        });
+
+        // 거래 내역 클릭 이벤트 (jQuery 사용 예시)
+        $('.transaction-item').on('click', function() {
+            // TODO: 내역 상세 페이지로 이동 또는 상세 모달 표시
+            console.log("거래 내역 클릭됨:", $(this).find('strong').text());
+        });
+    });
+</script>
+</body>
+</html>
