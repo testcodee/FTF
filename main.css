@@ -1,0 +1,196 @@
+v\\
+    /* CSS 스타일링은 이전 응답과 동일하게 적용됩니다. */
+    /* 기본 스타일 초기화 및 폰트 설정 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+/* 메인 컨테이너 (모바일 화면 중앙 정렬 및 최대 폭 제한) */
+.container {
+    max-width: 420px;
+    margin: 0 auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    min-height: 100vh;
+    padding-bottom: 60px; /* 하단바 공간 확보 */
+}
+
+/* 헤더 - 월 이동 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 15px;
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+}
+.header button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #4CAF50;
+}
+.current-month {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* 요약 카드 영역 */
+.summary-cards {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    gap: 10px;
+}
+.card {
+    flex: 1;
+    background-color: #fff;
+    padding: 15px 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+.card-title {
+    font-size: 0.8rem;
+    color: #777;
+    margin-bottom: 5px;
+}
+.income { color: #4CAF50; font-weight: bold; }
+.expense { color: #F44336; font-weight: bold; }
+.balance { color: #2196F3; font-weight: bold; font-size: 1.1rem; }
+
+/* 차트 영역 (간단한 Placeholder) */
+.chart-section {
+    padding: 15px;
+}
+.chart-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.chart-placeholder {
+    height: 150px;
+    background-color: #e0f2f1;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #00796B;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+/* 알림 영역 */
+.alert-card {
+    padding: 15px;
+    margin: 15px;
+    background-color: #fff3e0;
+    border-radius: 10px;
+    border-left: 5px solid #ff9800;
+}
+.alert-card p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+/* 거래 내역 영역 */
+.transactions-section {
+    padding: 15px 15px 0 15px;
+}
+.transactions-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.transaction-day {
+    margin-top: 15px;
+    padding-top: 5px;
+    border-top: 1px solid #eee;
+    font-weight: bold;
+    color: #555;
+    font-size: 0.9rem;
+}
+.transaction-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f9f9f9;
+}
+.transaction-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+.transaction-category {
+    font-size: 0.8rem;
+    color: #999;
+}
+.transaction-amount {
+    font-weight: bold;
+    font-size: 1rem;
+}
+.more-link {
+    display: block;
+    text-align: center;
+    padding: 15px 0;
+    color: #2196F3;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+/* Floating Action Button (FAB) */
+.fab {
+    position: fixed;
+    bottom: 75px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: #2196F3;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 50px;
+    font-size: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 10;
+    user-select: none;
+    /* 모바일 화면 중앙에 정렬되도록 조정 */
+    left: 50%;
+    transform: translateX(170px);
+}
+
+/* 하단 네비게이션 바 */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 420px;
+    height: 60px;
+    background-color: #fff;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+}
+.nav-item {
+    text-align: center;
+    color: #777;
+    text-decoration: none;
+    font-size: 0.8rem;
+}
+.nav-item.active {
+    color: #4CAF50;
+    font-weight: bold;
+}
+.nav-item i {
+    display: block;
+    font-size: 1.2rem;
+    margin-bottom: 3px;
+}
