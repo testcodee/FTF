@@ -1,107 +1,143 @@
-const canvas = document.getElementById('blackholeCanvas');
-const ctx = canvas.getContext('2d');
-
-let width, height;
-let particles = [];
-const particleCount = 150; // 입자 개수
-const mouse = { x: -1000, y: -1000, active: false };
-
-// 마우스 위치 업데이트
-window.addEventListener('mousemove', (e) => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-    mouse.active = true;
-});
-
-// 화면 크기 조정
-function resize() {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resize);
-resize();
-
-class Particle {
-    constructor() {
-        this.init();
-    }
-
-    init() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * 2;
-        this.vy = (Math.random() - 0.5) * 2;
-        this.radius = Math.random() * 2 + 1;
-        this.color = `hsla(${Math.random() * 50 + 200}, 80%, 70%, ${Math.random()})`; // 푸른빛/보랏빛
-    }
-
-    update() {
-        if (mouse.active) {
-            const dx = mouse.x - this.x;
-            const dy = mouse.y - this.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            
-            // 블랙홀 중력 계산 (거리가 가까울수록 강해짐)
-            const force = (1000 / (distance * distance)) * 20; 
-            
-            if (distance < 500) { // 영향권 설정
-                this.vx += (dx / distance) * force;
-                this.vy += (dy / distance) * force;
-            }
-        }
-
-        // 마찰력 (입자가 무한히 빨라지지 않게 함)
-        this.vx *= 0.95;
-        this.vy *= 0.95;
-
-        this.x += this.vx;
-        this.y += this.vy;
-
-        // 화면 밖으로 나가면 다시 초기화
-        if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
-            this.init();
-        }
-    }
-
-    draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.fill();
-    }
-}
-
-// 입자 초기 생성
-for (let i = 0; i < particleCount; i++) {
-    particles.push(new Particle());
-}
-
-function animate() {
-    // 잔상 효과를 위해 반투명 검은색으로 덮음
-    ctx.fillStyle = 'rgba(5, 5, 5, 0.2)';
-    ctx.fillRect(0, 0, width, height);
-
-    particles.forEach(p => {
-        p.update();
-        p.draw();
-    });
-
-    requestAnimationFrame(animate);
-}
-
-animate();
-
-
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
+    <meta charset="UTF-8">
+    <title>Black Hole Image Warp</title>
     <style>
-        body { margin: 0; overflow: hidden; background: #050505; }
-        canvas { display: block; }
+        body { margin: 0; background: #111; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        canvas { cursor: crosshair; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body>
-    <canvas id="blackholeCanvas"></canvas>
+
+<canvas id="canvas"></canvas>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+const img = new Image();
+// 테스트용 이미지 (자신의 이미지 경로로 변경 가능)
+img.src = 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80';
+img.crossOrigin = "Anonymous";
+
+let points = [];
+const rows = 20; // 가로 격자 수
+const cols = 20; // 세로 격자 수
+let imgW, imgH;
+
+const mouse = { x: -1000, y: -1000, radius: 150, strength: 0.8 };
+
+img.onload = () => {
+    // 캔버스 크기를 이미지에 맞게 설정
+    imgW = img.width * 0.8;
+    imgH = img.height * 0.8;
+    canvas.width = imgW;
+    canvas.height = imgH;
+    
+    initPoints();
+    animate();
+};
+
+// 1. 초기 격자 점 생성
+function initPoints() {
+    points = [];
+    for (let i = 0; i <= rows; i++) {
+        for (let j = 0; j <= cols; j++) {
+            const x = (imgW / rows) * i;
+            const y = (imgH / cols) * j;
+            points.push({
+                x: x, y: y,       // 현재 위치 (왜곡될 위치)
+                origX: x, origY: y // 원래 위치 (복원용)
+            });
+        }
+    }
+}
+
+window.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+});
+
+// 2. 점 위치 업데이트 (블랙홀 효과)
+function update() {
+    points.forEach(p => {
+        const dx = mouse.x - p.origX;
+        const dy = mouse.y - p.origY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < mouse.radius) {
+            // 마우스 쪽으로 끌어당기는 힘 계산 (거리에 비례)
+            const force = (mouse.radius - dist) / mouse.radius;
+            p.x = p.origX + dx * force * mouse.strength;
+            p.y = p.origY + dy * force * mouse.strength;
+        } else {
+            // 영향권 밖이면 서서히 원래 위치로 복귀
+            p.x += (p.origX - p.x) * 0.1;
+            p.y += (p.origY - p.y) * 0.1;
+        }
+    });
+}
+
+// 3. 이미지 조각 그리기
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            // 현재 칸의 네 점 인덱스
+            const p1 = points[i * (cols + 1) + j];
+            const p2 = points[(i + 1) * (cols + 1) + j];
+            const p3 = points[(i + 1) * (cols + 1) + (j + 1)];
+            const p4 = points[i * (cols + 1) + (j + 1)];
+
+            // 이미지 소스 좌표
+            const sx = (img.width / rows) * i;
+            const sy = (img.height / cols) * j;
+            const sw = img.width / rows;
+            const sh = img.height / cols;
+
+            // Canvas의 drawImage로는 사각형 왜곡이 완벽하지 않아 
+            // 두 개의 삼각형으로 나누어 그리는 Mesh 방식 사용
+            drawTriangle(p1, p2, p4, sx, sy, sx + sw, sy, sx, sy + sh);
+            drawTriangle(p2, p3, p4, sx + sw, sy, sx + sw, sy + sh, sx, sy + sh);
+        }
+    }
+}
+
+// 삼각형 단위로 이미지를 왜곡해서 그리는 함수
+function drawTriangle(p1, p2, p3, sx1, sy1, sx2, sy2, sx3, sy3) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.lineTo(p3.x, p3.y);
+    ctx.closePath();
+    ctx.clip(); // 삼각형 영역으로 제한
+
+    // 이미지 변환 행렬 계산 (삼각형 왜곡 핵심)
+    const m1 = p1.x, m2 = p1.y, m3 = p2.x, m4 = p2.y, m5 = p3.x, m6 = p3.y;
+    const s1 = sx1, s2 = sy1, s3 = sx2, s4 = sy2, s5 = sx3, s6 = sy3;
+    
+    const denom = s1 * (s4 - s6) + s3 * (s6 - s2) + s5 * (s2 - s4);
+    const a = (m1 * (s4 - s6) + m3 * (s6 - s2) + m5 * (s2 - s4)) / denom;
+    const b = (m2 * (s4 - s6) + m4 * (s6 - s2) + m6 * (s2 - s4)) / denom;
+    const c = (m1 * (s5 - s3) + m3 * (s1 - s5) + m5 * (s3 - s1)) / denom;
+    const d = (m2 * (s5 - s3) + m4 * (s1 - s5) + m6 * (s3 - s1)) / denom;
+    const e = (m1 * (s3 * s6 - s5 * s4) + m3 * (s5 * s2 - s1 * s6) + m5 * (s1 * s4 - s3 * s2)) / denom;
+    const f = (m2 * (s3 * s6 - s5 * s4) + m4 * (s5 * s2 - s1 * s6) + m6 * (s1 * s4 - s3 * s2)) / denom;
+
+    ctx.transform(a, b, c, d, e, f);
+    ctx.drawImage(img, 0, 0);
+    ctx.restore();
+}
+
+function animate() {
+    update();
+    draw();
+    requestAnimationFrame(animate);
+}
+</script>
 </body>
 </html>
-
