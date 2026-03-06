@@ -1,132 +1,117 @@
 (function() {
-    // 1. 타겟 설정 (선택자가 안 맞을 경우를 대비해 img 태그를 직접 찾음)
-    const targetImg = document.querySelector('.hero__media picture img') || document.querySelector('.hero__media img');
-    
+    const TARGET_SELECTOR = '.hero__media picture img, .hero__media img';
+    let targetImg = document.querySelector(TARGET_SELECTOR);
+
     if (!targetImg) {
-        console.error("❌ 이미지를 찾을 수 없습니다. 선택자를 다시 확인하거나 이미지가 로드되었는지 확인하세요.");
+        console.error("❌ 이미지를 찾을 수 없습니다.");
         return;
     }
 
-    // 2. CORS 문제 해결을 위한 설정 (가능한 경우)
-    targetImg.crossOrigin = "anonymous";
+    // 엑박 방지를 위해 새 이미지 객체로 다시 로드 (CORS 허용 요청)
+    const proxyImg = new Image();
+    proxyImg.crossOrigin = "Anonymous"; 
+    proxyImg.src = targetImg.src + (targetImg.src.includes('?') ? '&' : '?') + 't=' + new Date().getTime(); 
 
-    const ROWS = 25; 
-    const COLS = 25;
-    const MOUSE_RADIUS = 300; 
-    const STRENGTH = 0.75;
+    proxyImg.onload = () => {
+        console.log("✅ 이미지 로드 성공! 블랙홀을 시작합니다.");
+        startBlackHole(proxyImg, targetImg);
+    };
 
-    let canvas, ctx, points = [];
-    let width, height;
+    proxyImg.onerror = () => {
+        console.error("❌ 보안 정책(CORS) 때문에 이미지를 가져올 수 없습니다. 이 사이트의 이미지는 보호되어 있습니다.");
+    };
 
-    function init() {
-        // 기존에 생성된 캔버스가 있다면 제거
-        if (window._blackholeCanvas) document.body.removeChild(window._blackholeCanvas);
+    function startBlackHole(sourceImg, originalImg) {
+        const ROWS = 20;
+        const COLS = 20;
+        const MOUSE_RADIUS = 250;
+        const STRENGTH = 0.8;
 
-        canvas = document.createElement('canvas');
-        ctx = canvas.getContext('2d');
-        window._blackholeCanvas = canvas;
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
         document.body.appendChild(canvas);
 
-        // 원본 이미지는 위치 유지용으로 투명도만 조절
-        targetImg.style.opacity = '0.01'; 
+        originalImg.style.visibility = 'hidden';
+
+        let points = [];
+        let w, h;
+
+        const updateSize = () => {
+            const rect = originalImg.getBoundingClientRect();
+            w = canvas.width = rect.width;
+            h = canvas.height = rect.height;
+            canvas.style.position = 'fixed';
+            canvas.style.left = rect.left + 'px';
+            canvas.style.top = rect.top + 'px';
+            canvas.style.zIndex = '99999';
+            canvas.style.pointerEvents = 'none';
+
+            points = [];
+            for (let i = 0; i <= ROWS; i++) {
+                for (let j = 0; j <= COLS; j++) {
+                    const x = (w / ROWS) * i;
+                    const y = (h / COLS) * j;
+                    points.push({ x, y, origX: x, origY: y });
+                }
+            }
+        };
 
         updateSize();
-        animate();
-    }
+        window.addEventListener('resize', updateSize);
+        window.addEventListener('scroll', updateSize);
 
-    function updateSize() {
-        const rect = targetImg.getBoundingClientRect();
-        width = canvas.width = rect.width;
-        height = canvas.height = rect.height;
-        
-        canvas.style.position = 'fixed'; // 스크롤 시에도 정확한 위치 고정
-        canvas.style.left = rect.left + 'px';
-        canvas.style.top = rect.top + 'px';
-        canvas.style.zIndex = '99999';
-        canvas.style.pointerEvents = 'none';
-
-        points = [];
-        for (let i = 0; i <= ROWS; i++) {
-            for (let j = 0; j <= COLS; j++) {
-                const x = (width / ROWS) * i;
-                const y = (height / COLS) * j;
-                points.push({ x, y, origX: x, origY: y });
-            }
-        }
-    }
-
-    let mouse = { x: -2000, y: -2000 };
-    window.addEventListener('mousemove', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        mouse.x = e.clientX - rect.left;
-        mouse.y = e.clientY - rect.top;
-    });
-
-    window.addEventListener('resize', updateSize);
-    window.addEventListener('scroll', updateSize);
-
-    function animate() {
-        ctx.clearRect(0, 0, width, height);
-        
-        // 3. 점 좌표 업데이트
-        points.forEach(p => {
-            const dx = mouse.x - p.origX;
-            const dy = mouse.y - p.origY;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-
-            if (dist < MOUSE_RADIUS) {
-                const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS;
-                p.x = p.origX + dx * force * STRENGTH;
-                p.y = p.origY + dy * force * STRENGTH;
-            } else {
-                p.x += (p.origX - p.x) * 0.15;
-                p.y += (p.origY - p.y) * 0.15;
-            }
+        let mouse = { x: -2000, y: -2000 };
+        window.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
         });
 
-        // 4. 격자 그리기
-        for (let i = 0; i < ROWS; i++) {
-            for (let j = 0; j < COLS; j++) {
-                const idx = (r, c) => r * (COLS + 1) + c;
-                const p1 = points[idx(i, j)], p2 = points[idx(i+1, j)], 
-                      p3 = points[idx(i+1, j+1)], p4 = points[idx(i, j+1)];
-                
-                const sw = targetImg.naturalWidth / ROWS;
-                const sh = targetImg.naturalHeight / COLS;
-                const sx = i * sw, sy = j * sh;
+        function render() {
+            ctx.clearRect(0, 0, w, h);
+            points.forEach(p => {
+                const dx = mouse.x - p.origX;
+                const dy = mouse.y - p.origY;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < MOUSE_RADIUS) {
+                    const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS;
+                    p.x = p.origX + dx * force * STRENGTH;
+                    p.y = p.origY + dy * force * STRENGTH;
+                } else {
+                    p.x += (p.origX - p.x) * 0.1;
+                    p.y += (p.origY - p.y) * 0.1;
+                }
+            });
 
-                drawTriangle(p1, p2, p4, sx, sy, sx+sw, sy, sx, sy+sh);
-                drawTriangle(p2, p3, p4, sx+sw, sy, sx+sw, sy+sh, sx, sy+sh);
+            for (let i = 0; i < ROWS; i++) {
+                for (let j = 0; j < COLS; j++) {
+                    const idx = (r, c) => r * (COLS + 1) + c;
+                    const p1 = points[idx(i, j)], p2 = points[idx(i+1, j)], 
+                          p3 = points[idx(i+1, j+1)], p4 = points[idx(i, j+1)];
+                    const sw = sourceImg.naturalWidth / ROWS, sh = sourceImg.naturalHeight / COLS;
+                    const sx = i * sw, sy = j * sh;
+
+                    [ [p1,p2,p4, sx,sy, sx+sw,sy, sx,sy+sh], [p2,p3,p4, sx+sw,sy, sx+sw,sy+sh, sx,sy+sh] ].forEach(t => {
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.moveTo(t[0].x, t[0].y); ctx.lineTo(t[1].x, t[1].y); ctx.lineTo(t[2].x, t[2].y);
+                        ctx.closePath(); ctx.clip();
+                        const denom = t[3]*(t[7]-t[9]) + t[5]*(t[9]-t[4]) + t[8]*(t[4]-t[7]);
+                        if(Math.abs(denom) > 0.1) {
+                            const a = (t[0].x*(t[7]-t[9]) + t[1].x*(t[9]-t[4]) + t[2].x*(t[4]-t[7])) / denom;
+                            const b = (t[0].y*(t[7]-t[9]) + t[1].y*(t[9]-t[4]) + t[2].y*(t[4]-t[7])) / denom;
+                            const c = (t[0].x*(t[8]-t[5]) + t[1].x*(t[3]-t[8]) + t[2].x*(t[5]-t[3])) / denom;
+                            const d = (t[0].y*(t[8]-t[5]) + t[1].y*(t[3]-t[8]) + t[2].y*(t[5]-t[3])) / denom;
+                            const e = (t[0].x*(t[5]*t[9]-t[8]*t[7]) + t[1].x*(t[8]*t[4]-t[3]*t[9]) + t[2].x*(t[3]*t[7]-t[5]*t[4])) / denom;
+                            const f = (t[0].y*(t[5]*t[9]-t[8]*t[7]) + t[1].y*(t[8]*t[4]-t[3]*t[9]) + t[2].y*(t[3]*t[7]-t[5]*t[4])) / denom;
+                            ctx.transform(a, b, c, d, e, f);
+                            ctx.drawImage(sourceImg, 0, 0, sourceImg.naturalWidth, sourceImg.naturalHeight, 0, 0, w, h);
+                        }
+                        ctx.restore();
+                    });
+                }
             }
+            requestAnimationFrame(render);
         }
-        requestAnimationFrame(animate);
     }
-
-    function drawTriangle(p1, p2, p3, sx1, sy1, sx2, sy2, sx3, sy3) {
-        ctx.save();
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.lineTo(p3.x, p3.y);
-        ctx.closePath(); ctx.clip();
-        
-        const denom = sx1 * (sy2 - sy3) + sx2 * (sy3 - sy1) + sx3 * (sy1 - sy2);
-        if (Math.abs(denom) > 0.1) {
-            const a = (p1.x*(sy2-sy3) + p2.x*(sy3-sy1) + p3.x*(sy1-sy2)) / denom;
-            const b = (p1.y*(sy2-sy3) + p2.y*(sy3-sy1) + p3.y*(sy1-sy2)) / denom;
-            const c = (p1.x*(sx3-sx2) + p2.x*(sx1-sx3) + p3.x*(sx2-sx1)) / denom;
-            const d = (p1.y*(sx3-sx2) + p2.y*(sx1-sx3) + p3.y*(sx2-sx1)) / denom;
-            const e = (p1.x*(sx2*sy3-sx3*sy2) + p2.x*(sx3*sy1-sx1*sy3) + p3.x*(sx1*sy2-sx2*sy1)) / denom;
-            const f = (p1.y*(sx2*sy3-sx3*sy2) + p2.y*(sx3*sy1-sx1*sy3) + p3.y*(sx1*sy2-sx2*sy1)) / denom;
-            ctx.transform(a, b, c, d, e, f);
-            try {
-                ctx.drawImage(targetImg, 0, 0, targetImg.naturalWidth, targetImg.naturalHeight, 0, 0, width, height);
-            } catch(e) {}
-        }
-        ctx.restore();
-    }
-
-    // 이미지가 완전히 로드된 후 시작
-    if (targetImg.complete) init();
-    else targetImg.onload = init;
-
-    console.log("🌌 Providernotfound 전용 블랙홀 실행 중...");
 })();
