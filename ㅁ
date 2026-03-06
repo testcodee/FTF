@@ -1,104 +1,139 @@
 (async function() {
-    alert("블랙홀 스크립트 시작! (이미지 위를 확인하세요)");
-    console.log("%c🌌 Black Hole Script Activated", "color: #8e44ad; font-size: 20px; font-weight: bold;");
-
     const TARGET_SELECTOR = '.hero__media picture img, .hero__media img';
     const targetImg = document.querySelector(TARGET_SELECTOR);
 
     if (!targetImg) {
-        alert("이미지를 찾을 수 없습니다. 선택자를 확인해주세요.");
+        alert("이미지를 찾을 수 없습니다.");
         return;
     }
 
-    // 1. 캔버스 생성 및 설정
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    document.body.appendChild(canvas);
+    console.log("🌌 이미지를 분석 중입니다... 잠시만 기다려주세요.");
 
-    // 2. 스타일 설정 (이미지 바로 위에 겹침)
-    const updatePos = () => {
-        const rect = targetImg.getBoundingClientRect();
-        canvas.width = rect.width;
-        canvas.height = rect.height;
-        canvas.style.position = 'fixed';
-        canvas.style.left = rect.left + 'px';
-        canvas.style.top = rect.top + 'px';
-        canvas.style.zIndex = '100000';
-        canvas.style.pointerEvents = 'none'; // 마우스 클릭 통과
-        canvas.style.mixBlendMode = 'multiply'; // 이미지를 어둡게 깎아내는 효과
+    // [핵심] CORS 우회를 위해 이미지를 Blob으로 다시 가져와서 DataURL로 변환
+    async function getSafeImage(url) {
+        try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(blob);
+            });
+        } catch (e) {
+            console.error("이미지 데이터 변환 실패:", e);
+            return url; // 실패 시 원본 사용
+        }
+    }
+
+    const safeSrc = await getSafeImage(targetImg.src);
+    const proxyImg = new Image();
+    proxyImg.src = safeSrc;
+
+    proxyImg.onload = () => {
+        startWarpEffect(proxyImg, targetImg);
     };
 
-    updatePos();
-    window.addEventListener('scroll', updatePos);
-    window.addEventListener('resize', updatePos);
+    function startWarpEffect(sourceImg, originalImg) {
+        const ROWS = 25; 
+        const COLS = 25;
+        const MOUSE_RADIUS = 300;
+        const STRENGTH = 0.8;
 
-    let mouse = { x: -1000, y: -1000 };
-    window.addEventListener('mousemove', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        mouse.x = e.clientX - rect.left;
-        mouse.y = e.clientY - rect.top;
-    });
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        document.body.appendChild(canvas);
 
-    // 3. 입자(Particles) 생성 - 이미지 조각 대신 검은 연기 입자 사용
-    const particles = [];
-    const pCount = 200;
+        // 원본 이미지는 감추기
+        originalImg.style.visibility = 'hidden';
 
-    for (let i = 0; i < pCount; i++) {
-        particles.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            vx: 0,
-            vy: 0,
-            size: Math.random() * 3 + 1,
-            angle: Math.random() * Math.PI * 2
+        let points = [];
+        let w, h;
+
+        const updateSize = () => {
+            const rect = originalImg.getBoundingClientRect();
+            w = canvas.width = rect.width;
+            h = canvas.height = rect.height;
+            canvas.style.position = 'fixed';
+            canvas.style.left = rect.left + 'px';
+            canvas.style.top = rect.top + 'px';
+            canvas.style.zIndex = '100000';
+            canvas.style.pointerEvents = 'none';
+
+            points = [];
+            for (let i = 0; i <= ROWS; i++) {
+                for (let j = 0; j <= COLS; j++) {
+                    const x = (w / ROWS) * i;
+                    const y = (h / COLS) * j;
+                    points.push({ x, y, origX: x, origY: y });
+                }
+            }
+        };
+
+        updateSize();
+        window.addEventListener('scroll', updateSize);
+        window.addEventListener('resize', updateSize);
+
+        let mouse = { x: -2000, y: -2000 };
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX - parseFloat(canvas.style.left);
+            mouse.y = e.clientY - parseFloat(canvas.style.top);
         });
-    }
 
-    function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        function render() {
+            ctx.clearRect(0, 0, w, h);
+            
+            points.forEach(p => {
+                const dx = mouse.x - p.origX;
+                const dy = mouse.y - p.origY;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < MOUSE_RADIUS) {
+                    const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS;
+                    // 마우스 방향으로 빨아들임
+                    p.x = p.origX + dx * force * STRENGTH;
+                    p.y = p.origY + dy * force * STRENGTH;
+                } else {
+                    // 부드럽게 복구
+                    p.x += (p.origX - p.x) * 0.1;
+                    p.y += (p.origY - p.y) * 0.1;
+                }
+            });
 
-        particles.forEach(p => {
-            const dx = mouse.x - p.x;
-            const dy = mouse.y - p.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
+            for (let i = 0; i < ROWS; i++) {
+                for (let j = 0; j < COLS; j++) {
+                    const idx = (r, c) => r * (COLS + 1) + c;
+                    const p1 = points[idx(i, j)], p2 = points[idx(i+1, j)], 
+                          p3 = points[idx(i+1, j+1)], p4 = points[idx(i, j+1)];
+                    
+                    const sw = sourceImg.naturalWidth / ROWS;
+                    const sh = sourceImg.naturalHeight / COLS;
+                    const sx = i * sw, sy = j * sh;
 
-            if (dist < 300) {
-                // 마우스 중심으로 회전하며 빨려 들어가는 물리 법칙
-                const force = (300 - dist) / 300;
-                const angle = Math.atan2(dy, dx) + 0.1; // 0.1을 더해 소용돌이 발생
-                
-                p.vx += Math.cos(angle) * force * 1.5;
-                p.vy += Math.sin(angle) * force * 1.5;
+                    drawT(p1, p2, p4, sx, sy, sx+sw, sy, sx, sy+sh);
+                    drawT(p2, p3, p4, sx+sw, sy, sx+sw, sy+sh, sx, sy+sh);
+                }
             }
+            requestAnimationFrame(render);
+        }
 
-            // 마찰력 및 이동
-            p.vx *= 0.95;
-            p.vy *= 0.95;
-            p.x += p.vx;
-            p.y += p.vy;
-
-            // 화면 밖으로 나가면 재배치
-            if (p.x < 0 || p.x > canvas.width || p.y < 0 || p.y > canvas.height) {
-                p.x = Math.random() * canvas.width;
-                p.y = Math.random() * canvas.height;
-            }
-
-            // 입자 그리기 (검은색 구멍 효과)
+        function drawT(p1, p2, p3, sx1, sy1, sx2, sy2, sx3, sy3) {
+            ctx.save();
             ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size * (1 + (300 - Math.min(dist, 300)) / 100), 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(0, 0, 0, ${0.5 + Math.random() * 0.5})`;
-            ctx.fill();
-        });
-
-        // 블랙홀 중심 핵 그림자
-        const grad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 100);
-        grad.addColorStop(0, 'rgba(0,0,0,1)');
-        grad.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        requestAnimationFrame(draw);
+            ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.lineTo(p3.x, p3.y);
+            ctx.closePath(); ctx.clip();
+            const denom = sx1*(sy2-sy3) + sx2*(sy3-sy1) + sx3*(sy1-sy2);
+            if(Math.abs(denom) > 0.1) {
+                const a = (p1.x*(sy2-sy3) + p2.x*(sy3-sy1) + p3.x*(sy1-sy2)) / denom;
+                const b = (p1.y*(sy2-sy3) + p2.y*(sy3-sy1) + p3.y*(sy1-sy2)) / denom;
+                const c = (p1.x*(sx3-sx2) + p2.x*(sx1-sx3) + p3.x*(sx2-sx1)) / denom;
+                const d = (p1.y*(sx3-sx2) + p2.y*(sx1-sx3) + p3.y*(sx2-sx1)) / denom;
+                const e = (p1.x*(sx2*sy3-sx3*sy2) + p2.x*(sx3*sy1-sx1*sy3) + p3.x*(sx1*sy2-sx2*sy1)) / denom;
+                const f = (p1.y*(sx2*sy3-sx3*sy2) + p2.y*(sx3*sy1-sx1*sy3) + p3.y*(sx1*sy2-sx2*sy1)) / denom;
+                ctx.transform(a, b, c, d, e, f);
+                ctx.drawImage(sourceImg, 0, 0);
+            }
+            ctx.restore();
+        }
+        render();
+        console.log("🌌 왜곡 효과가 활성화되었습니다!");
     }
-
-    draw();
 })();
